@@ -1,0 +1,35 @@
+    .option-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .option-group label {
+        min-width: 100px;
+        margin-bottom: 0;
+    }
+
+    .option-group input {
+        flex: 1;
+    }
+
+    .option-group button {
+        white-space: nowrap;
+    }
+
+    .cont {
+        height: auto;
+        padding: 0 10px;
+        border-left: 22px solid #47e027;
+        height: 25px;
+        margin-bottom: 25px;
+    }
+
+    .custom-btn {
+        min-width: 120px;
+        font-size: 14px;
+        white-space: nowrap;
+        text-align: center;
+        margin: 0 6px;
+    }
