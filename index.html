@@ -46,12 +46,19 @@
             display: none; /* Sadece mobilde görünecek */
         }
 
-        .hamburger {
-            font-size: 26px;
-            cursor: pointer;
-            padding: 5px 10px;
-            display: inline-block;
-        }
+        .logoekle {
+    font-size: 32px; /* önceki 42 idi, biraz küçülttük */
+    color: #f0f2f4;
+    font-weight: 600;
+    text-align: center;
+}
+
+.hamburger {
+    font-size: 28px;
+    color: white;
+    cursor: pointer;
+}
+
          /* Mobil ekranlar için */
          @media (max-width: 768px) {
             .topbar {
@@ -88,19 +95,20 @@
 <body>  
 
         <!-- HAMBURGER MENÜ BAŞLANGIÇ -->
-        <div class="topbar">
-            <span class="hamburger" onclick="toggleSidebar()">☰ Kategori</span>
-        </div>
+        <!-- <div class="topbar">
+            <span class="hamburger" onclick="toggleSidebar()">☰ </span>
+        </div> -->
         <!-- HAMBURGER MENÜ BİTİŞ -->
     <div class="container-fluid">
-        <div class="row d-flex align-items-center justify-content-center" style="background-color: #677c92;">
-            <div class="col-md-2 text-center">
-           
+        <div class="row align-items-center justify-content-between" style="background-color: #677c92; padding: 10px;">
+            <div class="col-2 d-block d-md-none">
+                <span class="hamburger" onclick="toggleSidebar()">☰</span>
             </div>
-            <div class="col-md-10 text-center logoekle" style="font-size: 42px; color: #f0f2f4;  font-weight: 600;">
-                HIMIÝA 8
+            <div class="col text-center">
+                <div class="logoekle">HIMIÝA 8</div>
             </div>
         </div>
+        
     </div>
     
 
@@ -176,6 +184,8 @@
             }
             $(".menu-item").removeClass("active");
             $(this).addClass("active");
+             // ☰ menüsünü kapat (mobilde)
+        $(".sidebar").removeClass("active");
         });
     });
 

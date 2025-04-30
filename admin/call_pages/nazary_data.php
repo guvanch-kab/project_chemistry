@@ -23,11 +23,15 @@
 <div class="container-fluid ">
     <div class="row">
         <div class="col-md-12 cont">
-            <h4 style="border-bottom: 1px solid #a28e66; font-weight: 600; color:#706143; padding:2px 0;">Nazary maglumatlar</h4>
+        <h4 style="border-bottom: 1px solid #a28e66; font-weight: 600; color:#706143; padding:2px 0;">
+    <a href="#" class="nazary_baslik" style="text-decoration: none; color: inherit; cursor: pointer;">Nazary maglumatlar</a>
+</h4>
+
+
         </div>
     </div>
 
-    <div class="row" style="padding:20px 0; border-bottom: 1px solid #518fa8;">
+    <div class="row" style="padding:20px 0; border-bottom: 0px solid #518fa8;">
 
         <div class="col-md-9 main_place">
             <!----------------- form------->
@@ -98,7 +102,7 @@
             </form>
         </div>
 
-        <div class="col-md-3" style="background-color: #fff; box-shadow: 0 3px 10px rgb(0 0 0 / 0.2); border-radius:4px">
+        <div class="col-md-3" id="select_parag" style="background-color: #fff; box-shadow: 0 3px 10px rgb(0 0 0 / 0.2); border-radius:4px">
 
             <!------------ Paragraf we Bolum  ------------->
             <?php
@@ -183,7 +187,7 @@
     $(function() {
         $(document).on("click", ".paragraph_select", function(e) {
             e.preventDefault();
-
+          
             var paragraphNo = $(this).data("paragraph-no");
             var paragraphName = $(this).data("paragraph-name");
             $.ajax({
@@ -195,13 +199,28 @@
                 },
                 success: function(response) {
                     $("#main_pl").html(response);
+                    $("#add_Product").hide()
+                    $("#select_parag").hide(); // Sol paneli gizle
+                    $("#main_pl").removeClass("col-md-9 col-md-6").addClass("col-md-12"); // Ana içeriği tam geniş yap
                 },
                 error: function() {
                     alert("Bir hata oluştu, lütfen tekrar deneyin.");
                 }
             });
         });
-    })
+    });
 </script>
+
+<script>
+    $(function () {
+        $(document).on("click", ".nazary_baslik", function () {
+            $("#select_parag").show(); // Sol paneli geri göster
+            $("#main_pl").removeClass("col-md-12").addClass("col-md-9"); // İçeriği eski genişliğe getir
+            $("#add_Product").show(); // Formu geri göster
+            $("#main_pl").html(""); // Paragraf içeriğini temizle
+        });
+    });
+</script>
+
 
 <script src="call_pages/js_files/add_remove_depart.js"></script>
