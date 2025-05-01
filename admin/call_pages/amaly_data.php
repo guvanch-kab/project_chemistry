@@ -23,11 +23,15 @@
 <div class="container-fluid ">
     <div class="row">
         <div class="col-md-12 cont">
-        <h4 style="border-bottom: 1px solid #a28e66; font-weight: 600; color:#706143; padding:2px 0;">Amaly işler</h4>
+            <h4 style="border-bottom: 1px solid #a28e66; font-weight: 600; color:#706143; padding:2px 0;">
+                <a href="#" class="nazary_baslik" style="text-decoration: none; color: inherit; cursor: pointer;">Amaly işler</a>
+            </h4>
+
+
         </div>
     </div>
 
-    <div class="row" style="padding:20px 0; border-bottom: 1px solid #518fa8;">
+    <div class="row" style="padding:20px 0; border-bottom: 0px solid #518fa8;">
 
         <div class="col-md-9 main_place">
             <!----------------- form------->
@@ -38,12 +42,12 @@
                         <!-- Input ve Butonları İçeren Flexbox -->
                         <div class="d-flex align-items-center;">
                             <!-- Input Alanı -->
-                            <input type="text" id="bolum_input" class="form-control " placeholder="Bölüm adyny yaz"
+                            <input type="text" id="bolum_input" class="form-control " placeholder="Amaly iş belgisi"
                                 style="border:1px solid #5e5eff;">
                             <!-- Ekle Butonu -->
-                            <button id="add_bolum" class="btn btn-success  custom-btn">Bölüm +</button>
+                            <button id="add_bolum" class="btn btn-success  custom-btn">Belgi +</button>
                             <!-- Sil Butonu -->
-                            <button id="delete_bolum" class="btn btn-danger custom-btn">Bölüm poz</button>
+                            <button id="delete_bolum" class="btn btn-danger custom-btn">Belgi poz</button>
                         </div>
                     </div>
                 </div>
@@ -51,7 +55,7 @@
                 <div class="row" style="padding: 10px 0;">
 
                     <div class="col">
-                        <label for="exampleFormControlSelect1">Bölüm (bap) belgisi</label>
+                        <label for="exampleFormControlSelect1">Amaly iş nomeri</label>
                         <select class="form-control" id="bolum_select" style="margin-bottom:12px;font-size:14px" required>
                             <option selected disabled value="">Bölüm (bap) sayla</option>
 
@@ -98,14 +102,14 @@
             </form>
         </div>
 
-        <div class="col-md-3" style="background-color: #fff; box-shadow: 0 3px 10px rgb(0 0 0 / 0.2); border-radius:4px">
+        <div class="col-md-3" id="select_parag" style="background-color: #fff; box-shadow: 0 3px 10px rgb(0 0 0 / 0.2); border-radius:4px">
 
             <!------------ Paragraf we Bolum  ------------->
             <?php
             require_once '../db_files/dbase.php';
 
 
-            $sql = "SELECT DISTINCT Bolum_belgi, Bolum_ady, Paragraf_ady, Paragraf_no FROM nazary_data ORDER BY Bolum_belgi";
+            $sql = "SELECT DISTINCT amaly_no, Bolum_ady, Paragraf_ady, Paragraf_no FROM amaly_data ORDER BY amaly_no";
             $result = $connect->query($sql);
 
             // Bölümleri gruplayarak saklamak
@@ -177,7 +181,7 @@
     });
 </script>
 
-<script src="call_pages/js_files/insert_data.js"></script>
+<script src="call_pages/js_files/insert_amaly_data.js"></script>
 
 <script>
     $(function() {
@@ -186,22 +190,39 @@
 
             var paragraphNo = $(this).data("paragraph-no");
             var paragraphName = $(this).data("paragraph-name");
+            var control_pr='amaly_paragraph'
             $.ajax({
-                url: "call_pages/get_paragraph_data.php", // Veri çekeceğiniz PHP dosyası
+                url: "call_pages/amaly_paragraph_data.php", // Veri çekeceğiniz PHP dosyası
                 type: "POST",
                 data: {
                     paragraf_no: paragraphNo,
-                    paragraf_ady: paragraphName
+                    paragraf_ady: paragraphName,
+                    control_pr:control_pr
                 },
                 success: function(response) {
                     $("#main_pl").html(response);
+                    $("#add_Product").hide()
+                    $("#select_parag").hide(); // Sol paneli gizle
+                    $("#main_pl").removeClass("col-md-9 col-md-6").addClass("col-md-12"); // Ana içeriği tam geniş yap
                 },
                 error: function() {
                     alert("Bir hata oluştu, lütfen tekrar deneyin.");
                 }
             });
         });
-    })
+    });
 </script>
 
-<script src="call_pages/js_files/add_remove_depart.js"></script>
+<script>
+    $(function() {
+        $(document).on("click", ".nazary_baslik", function() {
+            $("#select_parag").show(); // Sol paneli geri göster
+            $("#main_pl").removeClass("col-md-12").addClass("col-md-9"); // İçeriği eski genişliğe getir
+            $("#add_Product").show(); // Formu geri göster
+            $("#main_pl").html(""); // Paragraf içeriğini temizle
+        });
+    });
+</script>
+
+
+<script src="call_pages/js_files/add_remove_amaly.js"></script>

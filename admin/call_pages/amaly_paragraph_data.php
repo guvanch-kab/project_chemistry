@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $paragraf_ady = $_POST['paragraf_ady'] ?? '';
 
     // Gelen veriler boş değilse, sorguya filtre ekle
-    $sql = "SELECT id, Bolum_belgi, Bolum_ady, Paragraf_no, Paragraf_ady, PDF_file_ady, Surat FROM nazary_data WHERE Paragraf_ady='$paragraf_ady' ";
+    $sql = "SELECT id, amaly_no, Bolum_ady, Paragraf_no, Paragraf_ady, PDF_file_ady, Surat FROM amaly_data WHERE Paragraf_ady='$paragraf_ady' ";
 
     if (!empty($paragraf_no)) {
         $sql .= " AND Paragraf_no = '" . $connect->real_escape_string($paragraf_no) . "'";
@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // if (!empty($paragraf_ady)) {
     //     $sql .= " AND Paragraf_ady LIKE '%" . $connect->real_escape_string($paragraf_ady) . "%'";
     // }
-    $sql .= " ORDER BY Bolum_belgi";
+    $sql .= " ORDER BY amaly_no";
 
     $result = $connect->query($sql);
 
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo '<thead>
                 <tr>
                     <th>ID</th>
-                    <th>Bolum Belgi</th>
+                    <th>Amaly_no</th>
                     <th>Bolum Ady</th>
                     <th>Paragraf No</th>
                     <th>Paragraf Ady</th>
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         while ($row = $result->fetch_assoc()) {
             echo '<tr>';
             echo '<td><input type="number" name="id_belgi[]" value="' . $row['id'] . '" class="form-control"></td>';
-            echo '<td><input type="text" name="Bolum_belgi[]" value="' . htmlspecialchars($row['Bolum_belgi']) . '" class="form-control"></td>';
+            echo '<td><input type="text" name="Bolum_belgi[]" value="' . htmlspecialchars($row['amaly_no']) . '" class="form-control"></td>';
             echo '<td><input type="text" name="Bolum_ady[]" value="' . htmlspecialchars($row['Bolum_ady']) . '" class="form-control"></td>';
             echo '<td><input type="text" name="Paragraf_no[]" value="' . htmlspecialchars($row['Paragraf_no']) . '" class="form-control"></td>';
             echo '<td><input type="text" name="Paragraf_ady[]" value="' . htmlspecialchars($row['Paragraf_ady']) . '" class="form-control"></td>';
@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 processData: false, // FormData'nın işlenmesine izin ver
                 contentType: false, // Varsayılan içeriği devre dışı bırak
                 success: function(response) {
-                window.location.reload()
+                    window.location.reload()
 
                 },
                 error: function() {
@@ -119,27 +119,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         });
 
         // Satır silme işlemi
-        $(".delete-row").click(function () {
-        if (!confirm("Bu setiri pozmak isleyanizmi?")) {
-            return;
-        }
+        $(".delete-row").click(function() {
+            if (!confirm("Bu setiri pozmak isleyanizmi?")) {
+                return;
+            }
 
-        var row = $(this).closest("tr");
-        var id_belgi = row.find("input[name='id_belgi[]']").val();
+            var row = $(this).closest("tr");
+            var id_belgi = row.find("input[name='id_belgi[]']").val();
 
-        $.ajax({
-            url: "call_pages/delete_nazary_data.php",
-            type: "POST",
-            data: { Id_belgi: id_belgi },
-            success: function (response) {
-                alert("Setir ustunlikli pozuldy");
-                row.remove(); // Tablo satırını kaldır
-            },
-            error: function () {
-                alert("Silme sırasında bir hata oluştu.");
-            },
+            $.ajax({
+                url: "call_pages/delete_nazary_data.php",
+                type: "POST",
+                data: {
+                    Id_belgi: id_belgi
+                },
+                success: function(response) {
+                    alert("Setir ustunlikli pozuldy");
+                    row.remove(); // Tablo satırını kaldır
+                },
+                error: function() {
+                    alert("Silme sırasında bir hata oluştu.");
+                },
+            });
         });
-    });
 
     });
 </script>

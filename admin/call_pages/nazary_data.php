@@ -190,12 +190,14 @@
           
             var paragraphNo = $(this).data("paragraph-no");
             var paragraphName = $(this).data("paragraph-name");
+              var control_pr='data_paragraph'
             $.ajax({
                 url: "call_pages/get_paragraph_data.php", // Veri çekeceğiniz PHP dosyası
                 type: "POST",
                 data: {
                     paragraf_no: paragraphNo,
-                    paragraf_ady: paragraphName
+                    paragraf_ady: paragraphName,
+                    control_pr:control_pr
                 },
                 success: function(response) {
                     $("#main_pl").html(response);

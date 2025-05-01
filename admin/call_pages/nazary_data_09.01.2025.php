@@ -20,7 +20,7 @@
 <div class="col">
 <label for="exampleFormControlSelect1">Bölüm belgisi</label>
 <select class="form-control" id="bolum_select" style="margin-bottom:12px;font-size:14px" required>
-            <option selected disabled value="">Bölüm sayla</option>           
+            <option selected disabled value="">Sayla</option>           
             <option>I.Bölüm</option>
             <option>II.Bölüm</option>
             <option>III.Bölüm</option>
