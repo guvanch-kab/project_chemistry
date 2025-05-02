@@ -87,7 +87,7 @@
                 </div>
 
                 <div class="row" style="padding-bottom:5px;">
-                    <!-- <div class="col-md-12 form-group">
+                    <div class="col-md-12 form-group">
                         <label for="book_images">Surat saýlaň:</label>
                         <input type="file" class="form-control-file" name="book_images[]" id="book_images" accept="image/*" style="border: 1px solid #aeb3b3;">
                         <small class="form-text text-muted"></small>
@@ -95,7 +95,7 @@
                         <div id="imagePreview" class="mt-2">
                         </div>
 
-                    </div> -->
+                    </div>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Sakla</button>

@@ -41,16 +41,24 @@ if (!empty($_FILES['pdfFile']['name'])) {
 }
 
 
-// Resim yükleme
+// === Resim Yükleme ===
+$imageUploadDir = "uploads/";
+if (!is_dir($imageUploadDir)) {
+    if (!mkdir($imageUploadDir, 0777, true)) {
+        echo "Resim klasörü oluşturulamadı!";
+        exit;
+    }
+}
+
 $imagePaths = [];
 if (!empty($_FILES['book_images']['name'][0])) {
     foreach ($_FILES['book_images']['name'] as $key => $name) {
         $tmpName = $_FILES['book_images']['tmp_name'][$key];
         $fileName = uniqid() . "-" . basename($name);
-        $filePath = $uploadDir . $fileName;
+        $filePath = $imageUploadDir . $fileName;
 
         if (move_uploaded_file($tmpName, $filePath)) {
-            $imagePaths[] = $filePath;
+            $imagePaths[] = $fileName; // sadece dosya adını kaydediyoruz
         } else {
             echo "Resim yüklenirken hata oluştu!";
             exit;
@@ -58,7 +66,6 @@ if (!empty($_FILES['book_images']['name'][0])) {
     }
 }
 
-// Resim yollarını birleştir
 $imagePathsString = implode(',', $imagePaths);
 
 // Veritabanına veri ekleme
