@@ -19,18 +19,18 @@
         <div class="col-md-12">
             <!------------- Start ebook show ------------>
             <div class="container mt-4">
-                <h3>...</h3>
+                <h3></h3>
                 <div class="accordion" id="bolumAccordion">
                     <?php
                     require_once '../admin/db_files/dbase.php';
 
                     // Bölümleri getir (Distinct)
-                    $bolumQuery = "SELECT Bolum_belgi, MAX(Bolum_ady) AS Bolum_ady FROM nazary_data GROUP BY Bolum_belgi ORDER BY Bolum_belgi";
+                    $bolumQuery = "SELECT nomeri, MAX(Bolum_ady) AS Bolum_ady FROM meseleler_data GROUP BY nomeri ORDER BY nomeri";
                     $bolumResult = $connect->query($bolumQuery);
 
                     if ($bolumResult->num_rows > 0) {
                         while ($bolum = $bolumResult->fetch_assoc()) {
-                            $bolumBelgi = $bolum['Bolum_belgi'];
+                            $bolumBelgi = $bolum['nomeri'];
                             $bolumAdi = $bolum['Bolum_ady'];
 
                             echo '<div class="accordion-item">';
@@ -43,7 +43,7 @@
                             echo '<div class="accordion-body">';
 
                             // Alt paragrafları getir
-                            $paragrafQuery = "SELECT Paragraf_ady, Paragraf_no, PDF_file_ady FROM nazary_data WHERE Bolum_belgi = ? ORDER BY Paragraf_no";
+                            $paragrafQuery = "SELECT Paragraf_ady, Paragraf_no, PDF_file_ady FROM meseleler_data WHERE nomeri = ? ORDER BY Paragraf_no";
                             $stmt = $connect->prepare($paragrafQuery);
                             $stmt->bind_param("s", $bolumBelgi);
                             $stmt->execute();
@@ -75,7 +75,7 @@
                             echo '</div>';
                         }
                     } else {
-                        echo '<p>Veritabanında bölüm bulunamadı.</p>';
+                        echo '<p class="alert alert-warning">Maglumat tapylmady.</p>';
                     }
 
                     $connect->close();

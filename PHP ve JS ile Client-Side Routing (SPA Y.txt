@@ -1,0 +1,91 @@
+PHP ve JS ile Client-Side Routing (SPA Yöntemi)
+Eğer Single Page Application (SPA) mantığı ile çalışıyorsan ve sayfa içeriğini dinamik olarak güncellemeyi hedefliyorsan, client-side routing'e geçmen gerekebilir.
+
+Bunu yapmak için:
+
+JS Routing kullanmak.
+
+AJAX ile sadece veri getirmek.
+
+Sayfa içeriğini dinamik olarak değiştirmek.
+
+JavaScript ve AJAX ile Dinamik Routing:
+HTML Yapısı:
+
+Bir SPA’de tüm sayfa içeriği tek bir HTML dosyasına yerleştirilir.
+
+URL değiştikçe, içerik dinamik olarak değişir.
+
+html
+Копировать
+Редактировать
+<div id="content">
+    <!-- Dinamik içerik burada yüklenecek -->
+</div>
+
+<a href="home" class="route-link">Home</a>
+<a href="about" class="route-link">About</a>
+<a href="contact" class="route-link">Contact</a>
+JS ile URL'yi Yönetme ve Sayfa Yükleme:
+
+javascript
+Копировать
+Редактировать
+$(document).ready(function () {
+    // Dinamik yönlendirme
+    $('.route-link').click(function (event) {
+        event.preventDefault();
+        var route = $(this).attr('href');  // Linkten gelen yönlendirme
+
+        // AJAX ile sayfa içeriğini yükle
+        loadPageContent(route);
+    });
+
+    function loadPageContent(route) {
+        $.ajax({
+            url: 'content.php',
+            type: 'GET',
+            data: { page: route },
+            success: function (response) {
+                $('#content').html(response);  // İçeriği güncelle
+                history.pushState(null, null, route);  // URL'yi değiştirme
+            }
+        });
+    }
+
+    // Sayfa yüklendiğinde URL'ye göre içerik yükle
+    if (window.location.pathname !== "/") {
+        loadPageContent(window.location.pathname.slice(1));  // URL'yi keserek route'ı al
+    }
+});
+PHP İçeriği (content.php):
+
+php
+Копировать
+Редактировать
+<?php
+$page = $_GET['page'] ?? 'home';  // Parametreye göre sayfa yönlendir
+
+switch ($page) {
+    case 'home':
+        echo "<h1>Home Page</h1>";
+        break;
+    case 'about':
+        echo "<h1>About Page</h1>";
+        break;
+    case 'contact':
+        echo "<h1>Contact Page</h1>";
+        break;
+    default:
+        echo "<h1>Page Not Found</h1>";
+}
+?>
+Açıklama:
+URL değiştikçe içerik AJAX ile dinamik olarak yükleniyor.
+
+History API ile URL'yi değiştirip sayfa yenilenmeden içerik gösterimi yapıyorsun.
+
+Her tıklama sonrası PHP'den dinamik içerik alıyorsun.
+
+Tarayıcıda doğru URL görünür ama sayfa yenilenmez.
+

@@ -1,63 +1,63 @@
-<?php
 
+
+
+<?php
 require_once '../db_files/dbase.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $paragraf_no = $connect->real_escape_string($_POST['paragraf_no'] ?? '');
+    $paragraf_ady = $connect->real_escape_string($_POST['paragraf_ady'] ?? '');
 
-    $paragraf_no = $_POST['paragraf_no'] ?? '';
-    $paragraf_ady = $_POST['paragraf_ady'] ?? '';
-
-    // Gelen veriler boş değilse, sorguya filtre ekle
-    $sql = "SELECT id, Bolum_belgi, Bolum_ady, Paragraf_no, Paragraf_ady, PDF_file_ady, Surat FROM nazary_data WHERE Paragraf_ady='$paragraf_ady' ";
-
+    $sql = "SELECT id, nomeri, Bolum_ady, Paragraf_no, Paragraf_ady, PDF_file_ady, Surat FROM nazary_data WHERE Paragraf_ady='$paragraf_ady' ";
     if (!empty($paragraf_no)) {
         $sql .= " AND Paragraf_no = '" . $connect->real_escape_string($paragraf_no) . "'";
     }
-
-    // if (!empty($paragraf_ady)) {
-    //     $sql .= " AND Paragraf_ady LIKE '%" . $connect->real_escape_string($paragraf_ady) . "%'";
-    // }
-    $sql .= " ORDER BY Bolum_belgi";
+    $sql .= " ORDER BY nomeri";
 
     $result = $connect->query($sql);
 
     if ($result->num_rows > 0) {
-        echo '<form id="updateForm">';
-        echo '<table class="table table-bordered">';
-        echo '<thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Bolum Belgi</th>
-                    <th>Bolum Ady</th>
-                    <th>Paragraf No</th>
-                    <th>Paragraf Ady</th>
-                    <th>PDF file Ady</th>
-                    <th>Surat</th>
-                    <th>Üýtget</th>
-                    <th>Poz</th>
-                </tr>
-              </thead>';
-        echo '<tbody>';
-
+        echo '<form id="updateForm" enctype="multipart/form-data">';
         while ($row = $result->fetch_assoc()) {
-            echo '<tr>';
-            echo '<td><input type="number" name="id_belgi[]" value="' . $row['id'] . '" class="form-control"></td>';
-            echo '<td><input type="text" name="Bolum_belgi[]" value="' . htmlspecialchars($row['Bolum_belgi']) . '" class="form-control"></td>';
-            echo '<td><input type="text" name="Bolum_ady[]" value="' . htmlspecialchars($row['Bolum_ady']) . '" class="form-control"></td>';
-            echo '<td><input type="text" name="Paragraf_no[]" value="' . htmlspecialchars($row['Paragraf_no']) . '" class="form-control"></td>';
-            echo '<td><input type="text" name="Paragraf_ady[]" value="' . htmlspecialchars($row['Paragraf_ady']) . '" class="form-control"></td>';
-            echo '<td><input type="file" name="PDF_file_ady[]"  class="form-control"></td>';
+          //  echo '<div class="card mb-3 p-3 border rounded bg-light">';
+          echo '<div class="card mb-3 p-3 border rounded bg-light" data-id="' . $row['id'] . '">';
 
-            // echo '<td><input type="text" name="PDF_file_at[]" value="' . htmlspecialchars($row['PDF_file_ady']) . '" class="form-control"></td>';
+            echo '<div class="row g-2">';
+            
+            echo '<div class="col-md-2"><label>ID</label><input type="number" name="id_belgi[]" value="' . $row['id'] . '" class="form-control"></div>';
+            echo '<div class="col-md-2"><label>Nazary No</label><input type="text" name="Bolum_belgi[]" value="' . htmlspecialchars($row['nomeri']) . '" class="form-control"></div>';
+            
+            // Bölüm Ady -> textarea
+            echo '<div class="col-md-4"><label>Bölüm Ady</label><textarea name="Bolum_ady[]" class="form-control" rows="2">' . htmlspecialchars($row['Bolum_ady']) . '</textarea></div>';
+            
+            echo '<div class="col-md-2"><label>Paragraf No</label><input type="text" name="Paragraf_no[]" value="' . htmlspecialchars($row['Paragraf_no']) . '" class="form-control"></div>';
+            
+            echo '<div class="col-md-12"><label>Paragraf Ady</label><textarea name="Paragraf_ady[]" class="form-control" rows="3">' . htmlspecialchars($row['Paragraf_ady']) . '</textarea></div>';
 
-            echo '<td><input type="file" name="Surat[]" class="form-control"></td>';
-            echo '<td><button type="button" class="btn btn-primary update-row">Üýtget</button></td>';
-            echo '<td><button type="button" class="btn btn-danger delete-row">Poz</button></td>';
-            echo '</tr>';
+            // PDF dosyası input + önizleme
+            echo '<div class="col-md-6"><label>PDF File</label><input type="file" name="PDF_file_ady[]" class="form-control">';
+            if (!empty($row['PDF_file_ady'])) {
+                echo '<div class="mt-2"><strong>Önizleme:</strong><br>';
+                echo '<iframe src="call_pages/pdf_files/' . htmlspecialchars($row['PDF_file_ady']) . '" width="100%" height="450px"></iframe>';
+                echo '</div>';
+            }
+            echo '</div>';
+
+            echo '<div class="col-md-6"><label>Surat</label><input type="file" name="Surat[]" class="form-control">';
+            if (!empty($row['Surat'])) {
+                echo '<div class="mt-2"><strong>Önizleme:</strong><br>';
+                echo '<img class="card-img-top" src="call_pages/uploads/' . htmlspecialchars($row['Surat']) . '" alt="Surat" style="max-width:100%; max-height:450px;">';
+                echo '</div>';
+            }
+            echo '</div>';
+            
+            echo '<div class="col-md-12 mt-2">';
+            echo '<button type="button" class="btn btn-success update-row">Üýtget</button> ';
+            echo '<button type="button" class="btn btn-danger delete-row">Poz</button>';
+            echo '</div>';
+
+            echo '</div></div>';
         }
-
-        echo '</tbody>';
-        echo '</table>';
         echo '</form>';
     } else {
         echo "Maglumat tapylmady.";
@@ -67,79 +67,106 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
+
+
+
 <script>
-    $(function() {
-        $(".update-row").click(function() {
-            var row = $(this).closest("tr"); // Tıklanan satır
+  $(function () {
+    $(".update-row").click(function () {
+        var row = $(this).closest(".card");
 
-            // Metin alanlarından verileri al
-            var id_belgi = row.find("input[name='id_belgi[]']").val();
-            var bolum_belgi = row.find("input[name='Bolum_belgi[]']").val();
-            var bolum_ady = row.find("input[name='Bolum_ady[]']").val();
-            var paragraf_no = row.find("input[name='Paragraf_no[]']").val();
-            var paragraf_ady = row.find("input[name='Paragraf_ady[]']").val();
+        var id_belgi = row.find("input[name='id_belgi[]']").filter(':first').val();
+        var bolum_belgi = row.find("input[name='Bolum_belgi[]']").filter(':first').val();
+        var bolum_ady = row.find("textarea[name='Bolum_ady[]']").filter(':first').val();
+        var paragraf_no = row.find("input[name='Paragraf_no[]']").filter(':first').val();
+        var paragraf_ady = row.find("textarea[name='Paragraf_ady[]']").filter(':first').val();
 
-            console.log(id_belgi)
+        var pdf_file_input = row.find("input[name='PDF_file_ady[]']").filter(':first')[0];
+        var surat_input = row.find("input[name='Surat[]']").filter(':first')[0];
 
-            // Dosya inputlarını al
-            var pdf_file_input = row.find("input[name='PDF_file_ady[]']")[0];
-            var surat_input = row.find("input[name='Surat[]']")[0];
+        var formData = new FormData();
+        formData.append("Id_belgi", id_belgi);
+        formData.append("Bolum_belgi", bolum_belgi);
+        formData.append("Bolum_ady", bolum_ady);
+        formData.append("Paragraf_no", paragraf_no);
+        formData.append("Paragraf_ady", paragraf_ady);
+        formData.append("amaly_upd", "nazary_upd");
 
-            // FormData nesnesi oluştur
-            var formData = new FormData();
-            formData.append("Id_belgi", id_belgi);
-            formData.append("Bolum_belgi", bolum_belgi);
-            formData.append("Bolum_ady", bolum_ady);
-            formData.append("Paragraf_no", paragraf_no);
-            formData.append("Paragraf_ady", paragraf_ady);
-
-            // Eğer dosyalar seçildiyse ekle
-            if (pdf_file_input.files.length > 0) {
-                formData.append("PDF_file_ady", pdf_file_input.files[0]);
-            }
-            if (surat_input.files.length > 0) {
-                formData.append("Surat", surat_input.files[0]);
-            }
-
-            // Ajax ile gönder
-            $.ajax({
-                url: "call_pages/update_data.php",
-                type: "POST",
-                data: formData,
-                processData: false, // FormData'nın işlenmesine izin ver
-                contentType: false, // Varsayılan içeriği devre dışı bırak
-                success: function(response) {
-                window.location.reload()
-
-                },
-                error: function() {
-                    alert("Güncelleme sırasında bir hata oluştu.");
-                },
-            });
-        });
-
-        // Satır silme işlemi
-        $(".delete-row").click(function () {
-        if (!confirm("Bu setiri pozmak isleyanizmi?")) {
-            return;
+         // PDF dosyasının seçili olup olmadığını kontrol et
+         if (pdf_file_input && pdf_file_input.files && pdf_file_input.files.length > 0) {
+            formData.append("PDF_file_ady", pdf_file_input.files[0]);
+        }
+        // Surat dosyasının seçili olup olmadığını kontrol et
+        if (surat_input && surat_input.files && surat_input.files.length > 0) {
+            formData.append("Surat", surat_input.files[0]);
         }
 
-        var row = $(this).closest("tr");
-        var id_belgi = row.find("input[name='id_belgi[]']").val();
-
         $.ajax({
-            url: "call_pages/delete_nazary_data.php",
+            url: "call_pages/update_data.php",
             type: "POST",
-            data: { Id_belgi: id_belgi },
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: "json", // JSON olarak alacağımızı belirtiyoruz
             success: function (response) {
-                alert("Setir ustunlikli pozuldy");
-                row.remove(); // Tablo satırını kaldır
+                if (response.status === "success") {
+
+                    var surat_file = response.Surat;  // Veritabanından dönen yeni dosya adını al
+        var imgElement = row.find(".card-img-top"); // Kartın içindeki resim öğesini seç
+
+        // Resmi güncelle, ?t= ile cache'yi engelle
+        imgElement.attr("src", "call_pages/uploads/" + surat_file + "?t=" + new Date().getTime());
+
+                    // alert("✅ Ustunlikli tazelendi!\n" +
+                    //       "Bolum: " + response.Bolum_ady + "\n" +
+                    //       "Paragraf No: " + response.Paragraf_no + "\n" +
+                    //       "PDF_file_ady: " + response.PDF_file_ady + "\n" +
+                    //       "Paragraf Ady: " + response.Paragraf_ady);
+                } else {
+                    alert("❌ Hata: " + (response.message || "Bilinmeyen hata oluştu."));
+                }
             },
-            error: function () {
-                alert("Silme sırasında bir hata oluştu.");
+            error: function (xhr, status, error) {
+                alert("⚠️ Sunucu hatasy: " + error);
             },
         });
     });
+//});
+
+   // });
+
+   $(document).on("click", ".delete-row", function (event) {
+    event.preventDefault();
+
+   // if (!confirm("Bu setiri pozmak isleyanizmi?")) return;
+
+    var $button = $(this);
+    var $card = $button.closest(".card");
+    var id_belgi = $card.data("id"); // data-id’den oku
+    var nazary_delete = "nazary_data";
+
+    $.ajax({
+        url: "call_pages/delete_data.php",
+        type: "POST",
+        dataType: "json",
+        data: {
+            Id_belgi: id_belgi,
+            poz_delete: nazary_delete
+        },
+        success: function (response) {
+            if (response.status === "success") {
+                    $(this).remove();
+                    window.location.reload();
+            } else {
+                alert("❌ Hata: " + response.message);
+            }
+        },
+        error: function () {
+            alert("❌ Pozmakda hata yuze çykdy.");
+        }
+    });
+});
+
 
     });
 </script>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: May 02, 2025 at 07:06 PM
+-- Generation Time: May 05, 2025 at 11:24 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.9
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `amaly_data` (
   `id` int NOT NULL,
-  `amaly_no` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nomeri` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `Bolum_ady` varchar(100) DEFAULT NULL,
   `Paragraf_no` varchar(10) NOT NULL,
   `Paragraf_ady` varchar(250) NOT NULL,
@@ -41,10 +41,8 @@ CREATE TABLE `amaly_data` (
 -- Dumping data for table `amaly_data`
 --
 
-INSERT INTO `amaly_data` (`id`, `amaly_no`, `Bolum_ady`, `Paragraf_no`, `Paragraf_ady`, `PDF_file_ady`, `Surat`) VALUES
-(60, '2', 'Fruits', '2.2', 'Apples and fruits', '1- Enpara Hesap Hareketleri.pdf', '5.jpg'),
-(61, '3', '3.3', '33', 'Kitaplar, books', '681475405b26f-cv_Kabulov_Guvanch 2024.pdf', 'Yagshygul.jpg'),
-(62, '1', 'Mendeleyew tablisa', '3.7', 'Mendeleyew tablisalary', 'cv_Kabulov_Guvanch 2024.pdf', '6814ecfc83042_Ahmet.JPG');
+INSERT INTO `amaly_data` (`id`, `nomeri`, `Bolum_ady`, `Paragraf_no`, `Paragraf_ady`, `PDF_file_ady`, `Surat`) VALUES
+(132, '1', 'Alkanlar we balkanlarr', '1.3', 'Alkanlar we gazlar', '68186610994a9-Muhammet zagran pasport.PDF', '681866109994b-1739294549146.jpg');
 
 -- --------------------------------------------------------
 
@@ -54,18 +52,16 @@ INSERT INTO `amaly_data` (`id`, `amaly_no`, `Bolum_ady`, `Paragraf_no`, `Paragra
 
 CREATE TABLE `amaly_data_bolum` (
   `id` int NOT NULL,
-  `amaly_no` varchar(100) NOT NULL
+  `belgi` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `amaly_data_bolum`
 --
 
-INSERT INTO `amaly_data_bolum` (`id`, `amaly_no`) VALUES
+INSERT INTO `amaly_data_bolum` (`id`, `belgi`) VALUES
 (1, '1'),
-(4, '2'),
-(5, '3'),
-(7, '4');
+(28, '2');
 
 -- --------------------------------------------------------
 
@@ -96,7 +92,50 @@ INSERT INTO `exam_result` (`id`, `user_id`, `student_name`, `exam_date`, `result
 (93, 15, 'Kabulov', '2025-04-29', '100', 2, 0, '9'),
 (95, 15, 'Kabulov', '2025-04-30', '100', 2, 0, '9'),
 (96, 26, 'Perhat', '2025-04-30', '100', 2, 0, '2.Caryek'),
-(97, 15, 'Kabulov', '2025-04-30', '50', 1, 1, '2.Caryek');
+(97, 15, 'Kabulov', '2025-04-30', '50', 1, 1, '2.Caryek'),
+(98, 15, 'Kabulov', '2025-05-05', '0', 0, 1, '4.caryek');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `meseleler_data`
+--
+
+CREATE TABLE `meseleler_data` (
+  `id` int NOT NULL,
+  `nomeri` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `Bolum_ady` varchar(100) DEFAULT NULL,
+  `Paragraf_no` varchar(10) NOT NULL,
+  `Paragraf_ady` varchar(250) NOT NULL,
+  `PDF_file_ady` text,
+  `Surat` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `meseleler_data`
+--
+
+INSERT INTO `meseleler_data` (`id`, `nomeri`, `Bolum_ady`, `Paragraf_no`, `Paragraf_ady`, `PDF_file_ady`, `Surat`) VALUES
+(132, '1', 'Alkanlar we balkanlarr', '1.3', 'Alkanlar we gazlar', '6818594cb64a5-Muhammet transkript.PDF', '6818596b1c2b0_1739294549146.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `meseleler_data_bolum`
+--
+
+CREATE TABLE `meseleler_data_bolum` (
+  `id` int NOT NULL,
+  `belgi` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `meseleler_data_bolum`
+--
+
+INSERT INTO `meseleler_data_bolum` (`id`, `belgi`) VALUES
+(9, '6'),
+(10, '1');
 
 -- --------------------------------------------------------
 
@@ -106,7 +145,7 @@ INSERT INTO `exam_result` (`id`, `user_id`, `student_name`, `exam_date`, `result
 
 CREATE TABLE `nazary_data` (
   `id` int NOT NULL,
-  `Bolum_belgi` varchar(100) NOT NULL,
+  `nomeri` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `Bolum_ady` varchar(100) DEFAULT NULL,
   `Paragraf_no` varchar(10) NOT NULL,
   `Paragraf_ady` varchar(250) NOT NULL,
@@ -119,12 +158,9 @@ CREATE TABLE `nazary_data` (
 -- Dumping data for table `nazary_data`
 --
 
-INSERT INTO `nazary_data` (`id`, `Bolum_belgi`, `Bolum_ady`, `Paragraf_no`, `Paragraf_ady`, `Tema`, `PDF_file_ady`, `Surat`) VALUES
-(53, '1.Bolum', 'MADDANYŇ GURLUŞYNYŇ ESASLARY', '1.9', 'Inert gaz we molekulalar', NULL, 'muhammet sat.pdf', '1739722107298.jpg'),
-(54, '1.Bolum', 'MADDANYŇ GURLUŞYNYŇ ESASLARY', '1.2', 'Otnositel atom we molekulýar massa', NULL, 'DovletBabayewCV.pdf', '1739722107298.jpg'),
-(55, '2.Bolum', 'MADDALARYŇ gregat ýagdaýy.', '3.1', 'Kristallar', NULL, '2022_ULUSLAARASI_OYRENCY_KONTENJANLARI.pdf', '2022_ULUSLAARASI_OYRENCY_KONTENJANLARI.pdf'),
-(56, '2.Bolum', 'Maddalarda atom calisigi', '5', 'Atomlar we molukalalar gatnasygy', NULL, '1- Enpara Hesap Hareketleri.pdf', '2022_ULUSLAARASI_OYRENCY_KONTENJANLARI.pdf'),
-(57, '3.Bolum', 'Galogenler', '5.1', 'Galagonler we gazlar', NULL, '6811fc524dda7-Muhammet transkript-2.pdf', '');
+INSERT INTO `nazary_data` (`id`, `nomeri`, `Bolum_ady`, `Paragraf_no`, `Paragraf_ady`, `Tema`, `PDF_file_ady`, `Surat`) VALUES
+(67, '1', 'galogenler', '1.1', 'galogenler we duzlar', NULL, '681865af03fd9-Muhammet transkript.PDF', ''),
+(69, '2', 'orgAniki däl HiMiÝA ', '11.1', '  Element himiýasy. Himiki elementleriň ýaýranlygy', NULL, '681872e0840fb-PDF.js Express Evaluation License.pdf', '');
 
 -- --------------------------------------------------------
 
@@ -134,19 +170,17 @@ INSERT INTO `nazary_data` (`id`, `Bolum_belgi`, `Bolum_ady`, `Paragraf_no`, `Par
 
 CREATE TABLE `nazary_data_bolumler` (
   `id` int NOT NULL,
-  `bolumler` varchar(100) NOT NULL
+  `belgi` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `nazary_data_bolumler`
 --
 
-INSERT INTO `nazary_data_bolumler` (`id`, `bolumler`) VALUES
+INSERT INTO `nazary_data_bolumler` (`id`, `belgi`) VALUES
 (16, '1'),
 (17, '2'),
-(18, '3'),
-(20, '4'),
-(23, '5');
+(20, '4');
 
 -- --------------------------------------------------------
 
@@ -191,9 +225,9 @@ CREATE TABLE `questions` (
 --
 
 INSERT INTO `questions` (`id`, `question_text`, `options`, `answers_text`, `correct_answer`, `caryek`, `question_img`, `created_at`) VALUES
-(118, 'suw formulasy..?', '681249dd43fba_1741245920_idrisbaba.jpg,1744734856_9.jpg', 'H2So4, HCL we...|Bir zatlar yaz', 1, '2.Caryek', '1744734856_8.jpg', '2025-04-15 16:34:16'),
+(118, 'suw formulasy..?', '68157a0acc8f7_banner4.jpg,68157a0f198da_usecomp6.jpg', 'H2So4, HCL we...|apple, grapes', 1, '2.Caryek', '2.jpg', '2025-04-15 16:34:16'),
 (124, 'maccoffe or nescafe', '1744888097_usecomp6.jpg,1744888097_2.jpg', 'maccoffe is, may...|neascafemore than other, ...', 2, '2.Caryek', '1744888097_bir.jpg', '2025-04-17 11:08:17'),
-(125, 'Idris baba medresesi', '1744890991_1.jpg,1744890991_usecomp9.jpg', 'Ahal welayaty, Gokdepe|lebap welayaty, Halac etrap', 1, '4.caryek', '1744890991_5.jpg', '2025-04-17 11:56:31');
+(125, 'Idris baba medresesi', '68191d9454e20_buhara-59_640x467.jpg,68191d9cea8d8_ingco10m.jpg', 'Ahal welayaty, Gokdepe|lebap welayaty, Halac etrap', 1, '4.caryek', 'idrisbaba.jpg', '2025-04-17 11:56:31');
 
 -- --------------------------------------------------------
 
@@ -227,6 +261,41 @@ INSERT INTO `students` (`id`, `username`, `phone_number`, `user_password`) VALUE
 (24, 'kabbi', 'kabbi(@', '$2y$10$P3H3ujiC0yg/w53PIkdhLur6VH3CTA96MhppBt0mv2QsOOW3zK/wK'),
 (25, 'Alym', '63232323', '$2y$10$5/qoCEI0G2V/IBJNpTui9eIAv0AkIrAXzFTL2fvYlk5nTzuHCzpwu'),
 (26, 'Perhat', '65454545', '$2y$10$CgHMJjN7EBBcRiPGEgyAL.oYfzU8JQymhvsLGq4LhyrGkEJcLos5e');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tejribe_data`
+--
+
+CREATE TABLE `tejribe_data` (
+  `id` int NOT NULL,
+  `nomeri` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `Bolum_ady` varchar(100) DEFAULT NULL,
+  `Paragraf_no` varchar(10) NOT NULL,
+  `Paragraf_ady` varchar(250) NOT NULL,
+  `PDF_file_ady` text,
+  `Surat` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tejribe_data_bolum`
+--
+
+CREATE TABLE `tejribe_data_bolum` (
+  `id` int NOT NULL,
+  `belgi` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `tejribe_data_bolum`
+--
+
+INSERT INTO `tejribe_data_bolum` (`id`, `belgi`) VALUES
+(1, '1'),
+(4, '2');
 
 -- --------------------------------------------------------
 
@@ -464,7 +533,8 @@ INSERT INTO `user_answers` (`id`, `user_id`, `question_id`, `selected_answer`, `
 (607, 26, 118, 1, '2025-04-30 19:02:02'),
 (608, 26, 124, 2, '2025-04-30 19:02:20'),
 (609, 15, 124, 1, '2025-04-30 19:04:18'),
-(610, 15, 118, 1, '2025-04-30 19:04:25');
+(610, 15, 118, 1, '2025-04-30 19:04:25'),
+(611, 15, 125, 2, '2025-05-05 23:22:04');
 
 --
 -- Indexes for dumped tables
@@ -486,6 +556,18 @@ ALTER TABLE `amaly_data_bolum`
 -- Indexes for table `exam_result`
 --
 ALTER TABLE `exam_result`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `meseleler_data`
+--
+ALTER TABLE `meseleler_data`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `meseleler_data_bolum`
+--
+ALTER TABLE `meseleler_data_bolum`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -519,6 +601,18 @@ ALTER TABLE `students`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `tejribe_data`
+--
+ALTER TABLE `tejribe_data`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tejribe_data_bolum`
+--
+ALTER TABLE `tejribe_data_bolum`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `user_answers`
 --
 ALTER TABLE `user_answers`
@@ -532,31 +626,43 @@ ALTER TABLE `user_answers`
 -- AUTO_INCREMENT for table `amaly_data`
 --
 ALTER TABLE `amaly_data`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
 
 --
 -- AUTO_INCREMENT for table `amaly_data_bolum`
 --
 ALTER TABLE `amaly_data_bolum`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `exam_result`
 --
 ALTER TABLE `exam_result`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+
+--
+-- AUTO_INCREMENT for table `meseleler_data`
+--
+ALTER TABLE `meseleler_data`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
+
+--
+-- AUTO_INCREMENT for table `meseleler_data_bolum`
+--
+ALTER TABLE `meseleler_data_bolum`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `nazary_data`
 --
 ALTER TABLE `nazary_data`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT for table `nazary_data_bolumler`
 --
 ALTER TABLE `nazary_data_bolumler`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `nazary_data_caryekler`
@@ -577,10 +683,22 @@ ALTER TABLE `students`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
+-- AUTO_INCREMENT for table `tejribe_data`
+--
+ALTER TABLE `tejribe_data`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
+
+--
+-- AUTO_INCREMENT for table `tejribe_data_bolum`
+--
+ALTER TABLE `tejribe_data_bolum`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
 -- AUTO_INCREMENT for table `user_answers`
 --
 ALTER TABLE `user_answers`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=611;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=612;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -5,22 +5,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $paragraf_no = $connect->real_escape_string($_POST['paragraf_no'] ?? '');
     $paragraf_ady = $connect->real_escape_string($_POST['paragraf_ady'] ?? '');
 
-    $sql = "SELECT id, amaly_no, Bolum_ady, Paragraf_no, Paragraf_ady, PDF_file_ady, Surat FROM amaly_data WHERE Paragraf_ady='$paragraf_ady' ";
+    $sql = "SELECT id, nomeri, Bolum_ady, Paragraf_no, Paragraf_ady, PDF_file_ady, Surat FROM amaly_data WHERE Paragraf_ady='$paragraf_ady' ";
     if (!empty($paragraf_no)) {
         $sql .= " AND Paragraf_no = '" . $connect->real_escape_string($paragraf_no) . "'";
     }
-    $sql .= " ORDER BY amaly_no";
+    $sql .= " ORDER BY nomeri";
 
     $result = $connect->query($sql);
 
     if ($result->num_rows > 0) {
         echo '<form id="updateForm" enctype="multipart/form-data">';
         while ($row = $result->fetch_assoc()) {
-            echo '<div class="card mb-3 p-3 border rounded bg-light">';
+          //  echo '<div class="card mb-3 p-3 border rounded bg-light">';
+          echo '<div class="card mb-3 p-3 border rounded bg-light" data-id="' . $row['id'] . '">';
+
             echo '<div class="row g-2">';
             
             echo '<div class="col-md-2"><label>ID</label><input type="number" name="id_belgi[]" value="' . $row['id'] . '" class="form-control"></div>';
-            echo '<div class="col-md-2"><label>Amaly No</label><input type="text" name="Bolum_belgi[]" value="' . htmlspecialchars($row['amaly_no']) . '" class="form-control"></div>';
+            echo '<div class="col-md-2"><label>Amaly No</label><input type="text" name="Bolum_belgi[]" value="' . htmlspecialchars($row['nomeri']) . '" class="form-control"></div>';
             
             // Bölüm Ady -> textarea
             echo '<div class="col-md-4"><label>Bölüm Ady</label><textarea name="Bolum_ady[]" class="form-control" rows="2">' . htmlspecialchars($row['Bolum_ady']) . '</textarea></div>';
@@ -41,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             echo '<div class="col-md-6"><label>Surat</label><input type="file" name="Surat[]" class="form-control">';
             if (!empty($row['Surat'])) {
                 echo '<div class="mt-2"><strong>Önizleme:</strong><br>';
-                echo '<img src="call_pages/uploads/' . htmlspecialchars($row['Surat']) . '" alt="Surat" style="max-width:100%; max-height:450px;">';
+                echo '<img class="card-img-top" src="call_pages/uploads/' . htmlspecialchars($row['Surat']) . '" alt="Surat" style="max-width:100%; max-height:450px;">';
                 echo '</div>';
             }
             echo '</div>';
@@ -66,15 +68,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 <script>
-   $(function() {
-    $(".update-row").click(function() {
+  $(function () {
+    $(".update-row").click(function () {
         var row = $(this).closest(".card");
 
         var id_belgi = row.find("input[name='id_belgi[]']").filter(':first').val();
         var bolum_belgi = row.find("input[name='Bolum_belgi[]']").filter(':first').val();
-        //var bolum_ady = row.find("input[name='Bolum_ady[]']").filter(':first').val();
         var bolum_ady = row.find("textarea[name='Bolum_ady[]']").filter(':first').val();
-
         var paragraf_no = row.find("input[name='Paragraf_no[]']").filter(':first').val();
         var paragraf_ady = row.find("textarea[name='Paragraf_ady[]']").filter(':first').val();
 
@@ -89,10 +89,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         formData.append("Paragraf_ady", paragraf_ady);
         formData.append("amaly_upd", "amaly_upd");
 
-        if (pdf_file_input && pdf_file_input.files.length > 0) {
+         // PDF dosyasının seçili olup olmadığını kontrol et
+         if (pdf_file_input && pdf_file_input.files && pdf_file_input.files.length > 0) {
             formData.append("PDF_file_ady", pdf_file_input.files[0]);
         }
-        if (surat_input && surat_input.files.length > 0) {
+        // Surat dosyasının seçili olup olmadığını kontrol et
+        if (surat_input && surat_input.files && surat_input.files.length > 0) {
             formData.append("Surat", surat_input.files[0]);
         }
 
@@ -102,62 +104,65 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             data: formData,
             processData: false,
             contentType: false,
-            success: function(response) {
-                alert("Ustunlikli tazelendi!");
-                window.location.reload();
-            },
-            error: function() {
-                alert("Tazelenme isinde hata yuze cykdy.");
-            },
-        });
-    });
+            dataType: "json", // JSON olarak alacağımızı belirtiyoruz
+            success: function (response) {
+                if (response.status === "success") {
 
-    $(".delete-row").click(function() {
-        if (!confirm("Bu setiri pozmak isleyanizmi?")) return;
+                    var surat_file = response.Surat;  // Veritabanından dönen yeni dosya adını al
+        var imgElement = row.find(".card-img-top"); // Kartın içindeki resim öğesini seç
 
-        var row = $(this).closest(".card");
-        var id_belgi = row.find("input[name='id_belgi[]']").filter(':first').val();
+        // Resmi güncelle, ?t= ile cache'yi engelle
+        imgElement.attr("src", "call_pages/uploads/" + surat_file + "?t=" + new Date().getTime());
 
-        $.ajax({
-            url: "call_pages/delete_nazary_data.php",
-            type: "POST",
-            data: { Id_belgi: id_belgi },
-            success: function() {
-                alert("Setir pozuldy.");
-                row.remove();
+                    // alert("✅ Ustunlikli tazelendi!\n" +
+                    //       "Bolum: " + response.Bolum_ady + "\n" +
+                    //       "Paragraf No: " + response.Paragraf_no + "\n" +
+                    //       "PDF_file_ady: " + response.PDF_file_ady + "\n" +
+                    //       "Paragraf Ady: " + response.Paragraf_ady);
+                } else {
+                    alert("❌ Hata: " + (response.message || "Bilinmeyen hata oluştu."));
+                }
             },
-            error: function() {
-                alert("Silme sırasında bir hata oluştu.");
+            error: function (xhr, status, error) {
+                alert("⚠️ Sunucu hatasy: " + error);
             },
         });
     });
 //});
 
+   // });
 
-        // Satır silme işlemi
-        $(".delete-row").click(function() {
-            if (!confirm("Bu setiri pozmak isleyanizmi?")) {
-                return;
+   $(document).on("click", ".delete-row", function (event) {
+    event.preventDefault();
+
+   // if (!confirm("Bu setiri pozmak isleyanizmi?")) return;
+
+    var $button = $(this);
+    var $card = $button.closest(".card");
+    var id_belgi = $card.data("id"); // data-id’den oku
+    var amaly_delete = "amaly_data";
+
+    $.ajax({
+        url: "call_pages/delete_data.php",
+        type: "POST",
+        dataType: "json",
+        data: {
+            Id_belgi: id_belgi,
+            poz_delete: amaly_delete
+        },
+        success: function (response) {
+            if (response.status === "success") {
+                    $(this).remove();
+                    window.location.reload();
+            } else {
+                alert("❌ Hata: " + response.message);
             }
-
-            var row = $(this).closest("tr");
-            var id_belgi = row.find("input[name='id_belgi[]']").val();
-
-            $.ajax({
-                url: "call_pages/delete_nazary_data.php",
-                type: "POST",
-                data: {
-                    Id_belgi: id_belgi
-                },
-                success: function(response) {
-                    alert("Setir ustunlikli pozuldy");
-                    row.remove(); // Tablo satırını kaldır
-                },
-                error: function() {
-                    alert("Silme sırasında bir hata oluştu.");
-                },
-            });
-        });
+        },
+        error: function () {
+            alert("❌ Pozmakda hata yuze çykdy.");
+        }
+    });
+});
 
     });
 </script>

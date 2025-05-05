@@ -42,7 +42,7 @@
                         <!-- Input ve Butonları İçeren Flexbox -->
                         <div class="d-flex align-items-center;">
                             <!-- Input Alanı -->
-                            <input type="text" id="bolum_input" class="form-control " placeholder="Bölüm adyny yaz"
+                            <input type="text" id="bolum_input" data-file_data="nazary_data_bolumler" class="form-control " placeholder="Bölüm adyny yaz"
                                 style="border:1px solid #5e5eff;">
                             <!-- Ekle Butonu -->
                             <button id="add_bolum" class="btn btn-success  custom-btn">Bölüm +</button>
@@ -55,6 +55,7 @@
                 <div class="row" style="padding: 10px 0;">
 
                     <div class="col">
+                        <input type="hidden" data-file_data="nazary_data" value="insert_data.php" id="dosya_adi">
                         <label for="exampleFormControlSelect1">Bölüm (bap) belgisi</label>
                         <select class="form-control" id="bolum_select" style="margin-bottom:12px;font-size:14px" required>
                             <option selected disabled value="">Bölüm (bap) sayla</option>
@@ -109,7 +110,7 @@
             require_once '../db_files/dbase.php';
 
 
-            $sql = "SELECT DISTINCT Bolum_belgi, Bolum_ady, Paragraf_ady, Paragraf_no FROM nazary_data ORDER BY Bolum_belgi";
+            $sql = "SELECT DISTINCT nomeri, Bolum_ady, Paragraf_ady, Paragraf_no FROM nazary_data ORDER BY nomeri";
             $result = $connect->query($sql);
 
             // Bölümleri gruplayarak saklamak
@@ -181,7 +182,7 @@
     });
 </script>
 
-<script src="call_pages/js_files/insert_data.js"></script>
+<script src="call_pages/js_files/insert_check_data.js"></script>
 
 <script>
     $(function() {
@@ -225,4 +226,5 @@
 </script>
 
 
-<script src="call_pages/js_files/add_remove_depart.js"></script>
+<!-- <script src="call_pages/js_files/add_remove_depart.js"></script> -->
+<script src="call_pages/js_files/add_remove_amaly.js"></script>

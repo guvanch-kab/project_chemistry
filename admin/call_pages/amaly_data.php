@@ -2,7 +2,7 @@
     .cont {
         height: auto;
         padding: 0 10px;
-        border-left: 22px solid #a28e66;
+        border-left: 22px solid #5093ba;
         height: 25px;
     }
 
@@ -23,8 +23,8 @@
 <div class="container-fluid ">
     <div class="row">
         <div class="col-md-12 cont">
-            <h4 style="border-bottom: 1px solid #a28e66; font-weight: 600; color:#706143; padding:2px 0;">
-                <a href="#" class="nazary_baslik" style="text-decoration: none; color: inherit; cursor: pointer;">Amaly işler</a>
+            <h4 style="border-bottom: 1px solid #5093ba; font-weight: 600; color:#706143; padding:2px 0;">
+                <a href="#" class="amaly_baslik" style="text-decoration: none; color: #5093ba; cursor: pointer;">Amaly işler</a>
             </h4>
 
 
@@ -42,7 +42,7 @@
                         <!-- Input ve Butonları İçeren Flexbox -->
                         <div class="d-flex align-items-center;">
                             <!-- Input Alanı -->
-                            <input type="text" id="bolum_input" class="form-control " placeholder="Amaly iş belgisi"
+                            <input type="text" id="bolum_input" data-file_data="amaly_data_bolum"  class="form-control " placeholder="Amaly iş belgisi"
                                 style="border:1px solid #5e5eff;">
                             <!-- Ekle Butonu -->
                             <button id="add_bolum" class="btn btn-success  custom-btn">Belgi +</button>
@@ -55,6 +55,7 @@
                 <div class="row" style="padding: 10px 0;">
 
                     <div class="col">
+                    <input type="hidden" data-file_data="amaly_data" value="insert_amaly_data.php" id="dosya_adi">
                         <label for="exampleFormControlSelect1">Amaly iş nomeri</label>
                         <select class="form-control" id="bolum_select" style="margin-bottom:12px;font-size:14px" required>
                             <option selected disabled value="">Bölüm (bap) sayla</option>
@@ -109,7 +110,7 @@
             require_once '../db_files/dbase.php';
 
 
-            $sql = "SELECT DISTINCT amaly_no, Bolum_ady, Paragraf_ady, Paragraf_no FROM amaly_data ORDER BY amaly_no";
+            $sql = "SELECT DISTINCT nomeri, Bolum_ady, Paragraf_ady, Paragraf_no FROM amaly_data ORDER BY nomeri";
             $result = $connect->query($sql);
 
             // Bölümleri gruplayarak saklamak
@@ -148,7 +149,7 @@
         <div class="col-md-12" id="main_pl"></div>
     </div>
 
-    <div id="response"></div>
+    <div id="response" class="netije"></div>
 </div><!--end div cont-fluid---->
 
 <script>
@@ -181,7 +182,7 @@
     });
 </script>
 
-<script src="call_pages/js_files/insert_amaly_data.js"></script>
+<script src="call_pages/js_files/insert_check_data.js"></script>
 
 <script>
     $(function() {
@@ -214,14 +215,24 @@
 </script>
 
 <script>
-    $(function() {
-        $(document).on("click", ".nazary_baslik", function() {
-            $("#select_parag").show(); // Sol paneli geri göster
-            $("#main_pl").removeClass("col-md-12").addClass("col-md-9"); // İçeriği eski genişliğe getir
-            $("#add_Product").show(); // Formu geri göster
-            $("#main_pl").html(""); // Paragraf içeriğini temizle
+   $(function() {
+    $(document).on("click", ".amaly_baslik", function(e) {
+        e.preventDefault();
+
+        $("#select_parag").show();
+        $("#add_Product").show();
+
+        // Panel genişliğini ayarla
+        $("#main_pl").removeClass("col-md-12").addClass("col-md-9");
+
+        // Sunucudan içerik yükle (sayfa refresh yerine)
+        $("#main_pl").load("call_pages/amaly_paragraph_data.php", function(response, status, xhr) {
+            if (status == "error") {
+                $("#main_pl").html('<div class="alert alert-danger">Veriler yüklenemedi!</div>');
+            }
         });
     });
+});
 </script>
 
 

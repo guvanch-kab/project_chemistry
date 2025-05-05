@@ -1,6 +1,6 @@
 Array
 (
-    [change_value] => Bir zatlar yaz
+    [change_value] => apple, grapes
     [idno] => 118
     [hidden_input] => answers_text
     [index] => 1

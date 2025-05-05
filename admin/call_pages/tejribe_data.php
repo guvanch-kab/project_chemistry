@@ -23,11 +23,15 @@
 <div class="container-fluid ">
     <div class="row">
         <div class="col-md-12 cont">
-            <h4 style="border-bottom: 1px solid #a28e66; font-weight: 600; color:#706143; padding:2px 0;">Tejribe işleri</h4>
+            <h4 style="border-bottom: 1px solid #a28e66; font-weight: 600; color:#706143; padding:2px 0;">
+                <a href="#" class="tejribe_baslik" style="text-decoration: none; color: inherit; cursor: pointer;">Tejribe işler</a>
+            </h4>
+
+
         </div>
     </div>
 
-    <div class="row" style="padding:20px 0; border-bottom: 1px solid #518fa8;">
+    <div class="row" style="padding:20px 0; border-bottom: 0px solid #518fa8;">
 
         <div class="col-md-9 main_place">
             <!----------------- form------->
@@ -38,12 +42,12 @@
                         <!-- Input ve Butonları İçeren Flexbox -->
                         <div class="d-flex align-items-center;">
                             <!-- Input Alanı -->
-                            <input type="text" id="bolum_input" class="form-control " placeholder="Bölüm adyny yaz"
+                            <input type="text" id="bolum_input" data-file_data="tejribe_data_bolum" class="form-control " placeholder="tejribe iş belgisi"
                                 style="border:1px solid #5e5eff;">
                             <!-- Ekle Butonu -->
-                            <button id="add_bolum" class="btn btn-success  custom-btn">Bölüm +</button>
+                            <button id="add_bolum" class="btn btn-success  custom-btn">Belgi +</button>
                             <!-- Sil Butonu -->
-                            <button id="delete_bolum" class="btn btn-danger custom-btn">Bölüm poz</button>
+                            <button id="delete_bolum" class="btn btn-danger custom-btn">Belgi poz</button>
                         </div>
                     </div>
                 </div>
@@ -51,7 +55,8 @@
                 <div class="row" style="padding: 10px 0;">
 
                     <div class="col">
-                        <label for="exampleFormControlSelect1">Bölüm (bap) belgisi</label>
+                    <input type="hidden" data-file_data="tejribe_data" value="insert_tejribe_data.php" id="dosya_adi">
+                        <label for="exampleFormControlSelect1">tejribe iş nomeri</label>
                         <select class="form-control" id="bolum_select" style="margin-bottom:12px;font-size:14px" required>
                             <option selected disabled value="">Bölüm (bap) sayla</option>
 
@@ -83,7 +88,7 @@
                 </div>
 
                 <div class="row" style="padding-bottom:5px;">
-                    <!-- <div class="col-md-12 form-group">
+                    <div class="col-md-12 form-group">
                         <label for="book_images">Surat saýlaň:</label>
                         <input type="file" class="form-control-file" name="book_images[]" id="book_images" accept="image/*" style="border: 1px solid #aeb3b3;">
                         <small class="form-text text-muted"></small>
@@ -91,21 +96,21 @@
                         <div id="imagePreview" class="mt-2">
                         </div>
 
-                    </div> -->
+                    </div>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Sakla</button>
             </form>
         </div>
 
-        <div class="col-md-3" style="background-color: #fff; box-shadow: 0 3px 10px rgb(0 0 0 / 0.2); border-radius:4px">
+        <div class="col-md-3" id="select_parag" style="background-color: #fff; box-shadow: 0 3px 10px rgb(0 0 0 / 0.2); border-radius:4px">
 
             <!------------ Paragraf we Bolum  ------------->
             <?php
             require_once '../db_files/dbase.php';
 
 
-            $sql = "SELECT DISTINCT Bolum_belgi, Bolum_ady, Paragraf_ady, Paragraf_no FROM nazary_data ORDER BY Bolum_belgi";
+            $sql = "SELECT DISTINCT nomeri, Bolum_ady, Paragraf_ady, Paragraf_no FROM tejribe_data ORDER BY nomeri";
             $result = $connect->query($sql);
 
             // Bölümleri gruplayarak saklamak
@@ -144,7 +149,7 @@
         <div class="col-md-12" id="main_pl"></div>
     </div>
 
-    <div id="response"></div>
+    <div id="response" class="netije"></div>
 </div><!--end div cont-fluid---->
 
 <script>
@@ -177,7 +182,7 @@
     });
 </script>
 
-<script src="call_pages/js_files/insert_data.js"></script>
+<script src="call_pages/js_files/insert_check_data.js"></script>
 
 <script>
     $(function() {
@@ -186,22 +191,49 @@
 
             var paragraphNo = $(this).data("paragraph-no");
             var paragraphName = $(this).data("paragraph-name");
+            var control_pr='amaly_paragraph'
             $.ajax({
-                url: "call_pages/get_paragraph_data.php", // Veri çekeceğiniz PHP dosyası
+                url: "call_pages/tejribe_paragraph_data.php", // Veri çekeceğiniz PHP dosyası
                 type: "POST",
                 data: {
                     paragraf_no: paragraphNo,
-                    paragraf_ady: paragraphName
+                    paragraf_ady: paragraphName,
+                    control_pr:control_pr
                 },
                 success: function(response) {
                     $("#main_pl").html(response);
+                    $("#add_Product").hide()
+                    $("#select_parag").hide(); // Sol paneli gizle
+                    $("#main_pl").removeClass("col-md-9 col-md-6").addClass("col-md-12"); // Ana içeriği tam geniş yap
                 },
                 error: function() {
                     alert("Bir hata oluştu, lütfen tekrar deneyin.");
                 }
             });
         });
-    })
+    });
 </script>
 
-<script src="call_pages/js_files/add_remove_depart.js"></script>
+<script>
+   $(function() {
+    $(document).on("click", ".tejribe_baslik", function(e) {
+        e.preventDefault();
+
+        $("#select_parag").show();
+        $("#add_Product").show();
+
+        // Panel genişliğini ayarla
+        $("#main_pl").removeClass("col-md-12").addClass("col-md-9");
+
+        // Sunucudan içerik yükle (sayfa refresh yerine)
+        $("#main_pl").load("call_pages/tejribe_paragraph_data.php", function(response, status, xhr) {
+            if (status == "error") {
+                $("#main_pl").html('<div class="alert alert-danger">Veriler yüklenemedi!</div>');
+            }
+        });
+    });
+});
+</script>
+
+
+<script src="call_pages/js_files/add_remove_amaly.js"></script>
