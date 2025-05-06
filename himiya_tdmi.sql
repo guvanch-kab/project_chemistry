@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: May 05, 2025 at 11:24 PM
+-- Generation Time: May 06, 2025 at 10:43 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.9
 
@@ -86,14 +86,8 @@ CREATE TABLE `exam_result` (
 
 INSERT INTO `exam_result` (`id`, `user_id`, `student_name`, `exam_date`, `result`, `correct_count`, `incorrect_count`, `caryek`) VALUES
 (66, 20, 'Umut', '2025-02-28', '100', 2, 0, '2.Caryek'),
-(68, 20, 'Umut', '2025-03-03', '0', 0, 1, '1.Caryek'),
-(89, 21, 'gubba', '2025-04-29', '100', 1, 0, '11'),
-(90, 21, 'gubba', '2025-04-29', '0', 0, 1, '4.caryek'),
-(93, 15, 'Kabulov', '2025-04-29', '100', 2, 0, '9'),
-(95, 15, 'Kabulov', '2025-04-30', '100', 2, 0, '9'),
 (96, 26, 'Perhat', '2025-04-30', '100', 2, 0, '2.Caryek'),
-(97, 15, 'Kabulov', '2025-04-30', '50', 1, 1, '2.Caryek'),
-(98, 15, 'Kabulov', '2025-05-05', '0', 0, 1, '4.caryek');
+(100, 15, 'Kabulov', '2025-05-06', '100', 1, 0, '3.Caryek');
 
 -- --------------------------------------------------------
 
@@ -227,7 +221,8 @@ CREATE TABLE `questions` (
 INSERT INTO `questions` (`id`, `question_text`, `options`, `answers_text`, `correct_answer`, `caryek`, `question_img`, `created_at`) VALUES
 (118, 'suw formulasy..?', '68157a0acc8f7_banner4.jpg,68157a0f198da_usecomp6.jpg', 'H2So4, HCL we...|apple, grapes', 1, '2.Caryek', '2.jpg', '2025-04-15 16:34:16'),
 (124, 'maccoffe or nescafe', '1744888097_usecomp6.jpg,1744888097_2.jpg', 'maccoffe is, may...|neascafemore than other, ...', 2, '2.Caryek', '1744888097_bir.jpg', '2025-04-17 11:08:17'),
-(125, 'Idris baba medresesi', '68191d9454e20_buhara-59_640x467.jpg,68191d9cea8d8_ingco10m.jpg', 'Ahal welayaty, Gokdepe|lebap welayaty, Halac etrap', 1, '4.caryek', 'idrisbaba.jpg', '2025-04-17 11:56:31');
+(125, 'Idris baba medresesi', '68191d9454e20_buhara-59_640x467.jpg,68191d9cea8d8_ingco10m.jpg', 'Ahal welayaty, Gokdepe|lebap welayaty, Halac etrap', 1, '4.caryek', 'idrisbaba.jpg', '2025-04-17 11:56:31'),
+(126, 'size of data...', '1746509156_ingco10m.jpg,1746509156_icki boyag 10 kg.jpg,1746509156_Без имеaи-12.jpg', 'MegaByte may be..|Kg may be..|Tonn may be... ', 3, '3.Caryek', '1746509156_12_55_11zon.jpg', '2025-05-06 05:25:56');
 
 -- --------------------------------------------------------
 
@@ -534,7 +529,11 @@ INSERT INTO `user_answers` (`id`, `user_id`, `question_id`, `selected_answer`, `
 (608, 26, 124, 2, '2025-04-30 19:02:20'),
 (609, 15, 124, 1, '2025-04-30 19:04:18'),
 (610, 15, 118, 1, '2025-04-30 19:04:25'),
-(611, 15, 125, 2, '2025-05-05 23:22:04');
+(611, 15, 125, 2, '2025-05-05 23:22:04'),
+(612, 15, 124, 2, '2025-05-06 08:22:31'),
+(613, 15, 118, 1, '2025-05-06 08:22:36'),
+(614, 15, 126, 3, '2025-05-06 08:27:07'),
+(615, 15, 126, 2, '2025-05-06 08:36:32');
 
 --
 -- Indexes for dumped tables
@@ -638,7 +637,7 @@ ALTER TABLE `amaly_data_bolum`
 -- AUTO_INCREMENT for table `exam_result`
 --
 ALTER TABLE `exam_result`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
 
 --
 -- AUTO_INCREMENT for table `meseleler_data`
@@ -674,7 +673,7 @@ ALTER TABLE `nazary_data_caryekler`
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=126;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=128;
 
 --
 -- AUTO_INCREMENT for table `students`
@@ -698,7 +697,7 @@ ALTER TABLE `tejribe_data_bolum`
 -- AUTO_INCREMENT for table `user_answers`
 --
 ALTER TABLE `user_answers`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=612;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=616;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
