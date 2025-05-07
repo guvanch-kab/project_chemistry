@@ -31,10 +31,10 @@ if (isset($_FILES['image']['name']) && isset($_POST['index']) && isset($_POST['q
         if (mysqli_query($connect, $update)) {
             echo json_encode(['status' => 'success', 'newImage' => $fileName]);
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'Veritabanı güncelleme hatası.']);
+            echo json_encode(['status' => 'error', 'message' => 'MB tazeleme yalnyslygy .']);
         }
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Dosya yükleme hatası.']);
+        echo json_encode(['status' => 'error', 'message' => 'File yükleme yalnysylygy.']);
     }
 }
 ?>

@@ -14,6 +14,7 @@ $index = isset($_POST["index"]) ? intval($_POST["index"]) : null;
 
 // Güvenlik için sadece izin verilen sütunlar
 $allowed_columns = ["answers_text", "question_text", "correct_answer"];
+
 if (!in_array($column, $allowed_columns)) {
     echo "❌ Geçersiz sütun adı!";
     exit;

@@ -20,7 +20,7 @@ $(document).ready(function () {
             type: 'POST',
             data: { action: 'amaly', amaly_no: amaly_no, file_data: file_data },  // Dinamik file_data ile gönder
             success: function (response) {
-                alert(response); // Test mesajı
+               // alert(response); // Test mesajı
                 $('#bolum_input').val(''); // Input alanını temizle
                 loadBolumler(); // Listeyi güncelle
             }
@@ -30,8 +30,7 @@ $(document).ready(function () {
     // Bölüm sil
     $('#delete_bolum').click(function () {
         const bolum_id = $('#bolum_select').val();
-        var file_data = $("#bolum_input").data("file_data");  // Eğer başka bir input'tan alıyorsanız, burada da kullanabilirsiniz.
-alert(bolum_id + file_data)
+//alert(bolum_id + file_data)
         if (!bolum_id) {
             alert("Pozmak üçin bir bölüm saylaň!");
             return;
@@ -70,7 +69,7 @@ alert(bolum_id + file_data)
 
                 } catch (e) {
                    // console.error("JSON Parsing Error: ", e);
-                    alert("Veri alınırken bir hata oluştu!");
+                    //alert("Veri alınırken bir hata oluştu!");
                 }
             }
         });

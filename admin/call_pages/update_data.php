@@ -72,7 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             "Bolum_ady" => $bolum_ady,
             "Paragraf_no" => $paragraf_no,
             "Paragraf_ady" => $paragraf_ady,
-            "id_belgi" => $id_belgi
+            "id_belgi" => $id_belgi,
+            "bolum_belgi" => $bolum_belgi
         ];
     } else {
         $response = [

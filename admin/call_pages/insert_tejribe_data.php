@@ -19,7 +19,7 @@ if (!$bolum_belgi || !$bolum_ady || !$paragraph_no || !$paragraf_ady) {
 }
 
 // Duplicate kontrolü
-$checkSql = "SELECT COUNT(*) FROM tejribe_data WHERE tejribe_no = ?";
+$checkSql = "SELECT COUNT(*) FROM tejribe_data WHERE nomeri = ?";
 $checkStmt = $connect->prepare($checkSql);
 $checkStmt->bind_param("s", $bolum_belgi);
 $checkStmt->execute();
@@ -87,7 +87,7 @@ if (!empty($_FILES['book_images']['name'][0])) {
 $imagePathsString = implode(',', $imagePaths);
 
 // Veritabanına veri ekleme
-$sql = "INSERT INTO tejribe_data (amaly_no, Bolum_ady, Paragraf_no, Paragraf_ady, PDF_file_ady, Surat)
+$sql = "INSERT INTO tejribe_data (nomeri, Bolum_ady, Paragraf_no, Paragraf_ady, PDF_file_ady, Surat)
         VALUES (?, ?, ?, ?, ?, ?)";
 $stmt = $connect->prepare($sql);
 if (!$stmt) {

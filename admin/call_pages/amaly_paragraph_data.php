@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // PDF dosyası input + önizleme
             echo '<div class="col-md-6"><label>PDF File</label><input type="file" name="PDF_file_ady[]" class="form-control">';
             if (!empty($row['PDF_file_ady'])) {
-                echo '<div class="mt-2"><strong>Önizleme:</strong><br>';
+                echo '<div class="mt-2"><strong>Seljerme - barlama:</strong><br>';
                 echo '<iframe src="call_pages/pdf_files/' . htmlspecialchars($row['PDF_file_ady']) . '" width="100%" height="450px"></iframe>';
                 echo '</div>';
             }
@@ -42,13 +42,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             echo '<div class="col-md-6"><label>Surat</label><input type="file" name="Surat[]" class="form-control">';
             if (!empty($row['Surat'])) {
-                echo '<div class="mt-2"><strong>Önizleme:</strong><br>';
+                echo '<div class="mt-2"><strong>Seljerme-barlama:</strong><br>';
                 echo '<img class="card-img-top" src="call_pages/uploads/' . htmlspecialchars($row['Surat']) . '" alt="Surat" style="max-width:100%; max-height:450px;">';
                 echo '</div>';
             }
             echo '</div>';
             
+        
             echo '<div class="col-md-12 mt-2">';
+
+            echo'<div class="updated_success" style="padding:10px 0;">  </div> ';
+            
             echo '<button type="button" class="btn btn-success update-row">Üýtget</button> ';
             echo '<button type="button" class="btn btn-danger delete-row">Poz</button>';
             echo '</div>';
@@ -63,9 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $connect->close();
 }
 ?>
-
-
-
 
 <script>
   $(function () {
@@ -105,37 +106,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             processData: false,
             contentType: false,
             dataType: "json", // JSON olarak alacağımızı belirtiyoruz
+            
             success: function (response) {
-                if (response.status === "success") {
-
-                    var surat_file = response.Surat;  // Veritabanından dönen yeni dosya adını al
-        var imgElement = row.find(".card-img-top"); // Kartın içindeki resim öğesini seç
-
-        // Resmi güncelle, ?t= ile cache'yi engelle
+    if (response.status === "success") {
+        // Görseli güncelle (zaten var)
+        var surat_file = response.Surat;
+        var imgElement = row.find(".card-img-top");
         imgElement.attr("src", "call_pages/uploads/" + surat_file + "?t=" + new Date().getTime());
 
-                    // alert("✅ Ustunlikli tazelendi!\n" +
-                    //       "Bolum: " + response.Bolum_ady + "\n" +
-                    //       "Paragraf No: " + response.Paragraf_no + "\n" +
-                    //       "PDF_file_ady: " + response.PDF_file_ady + "\n" +
-                    //       "Paragraf Ady: " + response.Paragraf_ady);
-                } else {
-                    alert("❌ Hata: " + (response.message || "Bilinmeyen hata oluştu."));
-                }
-            },
-            error: function (xhr, status, error) {
-                alert("⚠️ Sunucu hatasy: " + error);
-            },
+        // ✨ Güncellenen değerleri sayfada göster ✨
+        row.find("input[name='Bolum_belgi[]']").val(response.bolum_belgi);  // nomeri olarak kaydediliyor
+        row.find("textarea[name='Bolum_ady[]']").val(response.Bolum_ady);
+        row.find("input[name='Paragraf_no[]']").val(response.Paragraf_no);
+        row.find("textarea[name='Paragraf_ady[]']").val(response.Paragraf_ady);
+        var iframe = row.find("iframe");
+if (response.PDF_file_ady) {
+    iframe.attr("src", "call_pages/pdf_files/" + response.PDF_file_ady + "?t=" + new Date().getTime());
+}      
+
+        $(".updated_success").addClass("alert alert-success")
+          .text("Üýtgetme üstünlikli ýerine ýetirildi.") // İsteğe bağlı metin
+        //   .fadeIn().delay(5000).fadeOut();
+
+          setTimeout(function () {           
+                    var page="call_pages/amaly_data.php";//amaly_data.php";
+                    $(".main_place").empty()
+                    $(".main_place").load(page, function () {
+                    });
+                }, 4000);     
+    }
+    
+    
+    else {
+        alert("❌ Hata: " + (response.message || "Bilinmeyen hata oluştu."));
+    }
+}
         });
     });
-//});
-
-   // });
 
    $(document).on("click", ".delete-row", function (event) {
     event.preventDefault();
 
-   // if (!confirm("Bu setiri pozmak isleyanizmi?")) return;
+    //if (!confirm("Bu setiri pozmak isleyanizmi?")) return;
 
     var $button = $(this);
     var $card = $button.closest(".card");
@@ -153,7 +165,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         success: function (response) {
             if (response.status === "success") {
                     $(this).remove();
-                    window.location.reload();
+                    //window.location.reload();
+
+                    setTimeout(function () {           
+                    var page="call_pages/amaly_data.php";//amaly_data.php";
+                    $(".main_place").empty()
+                    $(".main_place").load(page, function () {
+                    });
+                }, 1000);
+
             } else {
                 alert("❌ Hata: " + response.message);
             }

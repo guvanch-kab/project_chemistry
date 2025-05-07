@@ -49,6 +49,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             echo '</div>';
 
             echo '<div class="col-md-12 mt-2">';
+
+            echo'<div class="updated_success" style="padding:10px 0;">  </div> ';
+            
             echo '<button type="button" class="btn btn-success update-row">Üýtget</button> ';
             echo '<button type="button" class="btn btn-danger delete-row">Poz</button>';
             echo '</div>';
@@ -107,19 +110,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 dataType: "json", // JSON olarak alacağımızı belirtiyoruz
                 success: function(response) {
                     if (response.status === "success") {
+        // Görseli güncelle (zaten var)
+        var surat_file = response.Surat;
+        var imgElement = row.find(".card-img-top");
+        imgElement.attr("src", "call_pages/uploads/" + surat_file + "?t=" + new Date().getTime());
 
-                        var surat_file = response.Surat; // Veritabanından dönen yeni dosya adını al
-                        var imgElement = row.find(".card-img-top"); // Kartın içindeki resim öğesini seç
+        // ✨ Güncellenen değerleri sayfada göster ✨
+        row.find("input[name='Bolum_belgi[]']").val(response.bolum_belgi);  // nomeri olarak kaydediliyor
+        row.find("textarea[name='Bolum_ady[]']").val(response.Bolum_ady);
+        row.find("input[name='Paragraf_no[]']").val(response.Paragraf_no);
+        row.find("textarea[name='Paragraf_ady[]']").val(response.Paragraf_ady);
+        var iframe = row.find("iframe");
+if (response.PDF_file_ady) {
+    iframe.attr("src", "call_pages/pdf_files/" + response.PDF_file_ady + "?t=" + new Date().getTime());
+}      
 
-                        // Resmi güncelle, ?t= ile cache'yi engelle
-                        imgElement.attr("src", "call_pages/uploads/" + surat_file + "?t=" + new Date().getTime());
+        $(".updated_success").addClass("alert alert-success")
+          .text("Üýtgetme üstünlikli ýerine ýetirildi.") // İsteğe bağlı metin
+        //   .fadeIn().delay(5000).fadeOut();
 
-                        // alert("✅ Ustunlikli tazelendi!\n" +
-                        //       "Bolum: " + response.Bolum_ady + "\n" +
-                        //       "Paragraf No: " + response.Paragraf_no + "\n" +
-                        //       "PDF_file_ady: " + response.PDF_file_ady + "\n" +
-                        //       "Paragraf Ady: " + response.Paragraf_ady);
-                    } else {
+          setTimeout(function () {           
+                    var page="call_pages/meseleler_data.php";//amaly_data.php";
+                    $(".main_place").empty()
+                    $(".main_place").load(page, function () {
+                    });
+                }, 4000);     
+    }
+                    else {
                         alert("❌ Hata: " + (response.message || "Bilinmeyen hata oluştu."));
                     }
                 },
@@ -152,8 +169,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 },
                 success: function(response) {
                     if (response.status === "success") {
-                        $(this).remove();
-                        window.location.reload();
+                    $(this).remove();
+                    //window.location.reload();
+
+                    setTimeout(function () {           
+                    var page="call_pages/meseleler_data.php";//amaly_data.php";
+                    $(".main_place").empty()
+                    $(".main_place").load(page, function () {
+                    });
+                }, 1000);
                     } else {
                         alert("❌ Hata: " + response.message);
                     }

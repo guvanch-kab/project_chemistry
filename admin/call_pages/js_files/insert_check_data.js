@@ -8,7 +8,7 @@ $(document).ready(function () {
         var file_data = $("#dosya_adi").data("file_data");  // data-file_data özelliğinden değeri al
 
         var dosya_adi=$("#dosya_adi").val();
-        alert(file_data)
+      //  alert(file_data)
 
         var formData = new FormData(this);
         var bolum_belgi = $("#bolum_select option:selected").text() || "Bilinmiyor";
@@ -43,7 +43,7 @@ $(document).ready(function () {
                 $("#response").html(alertMessage);
                 if (json.status === "success") {                    
                     $("#add_Product")[0].reset();
-                  
+                  /*  amaly_data.php sahypasyna yza don, refresh page */
                    setTimeout(function () {
                     var page="call_pages/"+file_data+".php";//amaly_data.php";
                     $(".main_place").empty()

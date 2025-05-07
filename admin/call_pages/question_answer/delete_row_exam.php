@@ -8,9 +8,9 @@ if (isset($_POST['Id_belgi'])) {
     $caryek_sene = $_POST['caryek_senesi']; 
 
 
-    $query = "DELETE FROM exam_result WHERE user_id = ? AND caryek=? ";
+    $query = "DELETE FROM exam_result WHERE user_id = ? AND caryek=? AND exam_date=? ";
     $stmt = mysqli_prepare($connect, $query);
-    mysqli_stmt_bind_param($stmt, "is", $id_belgi, $caryek_belgi);
+    mysqli_stmt_bind_param($stmt, "iss", $id_belgi, $caryek_belgi, $caryek_sene);
 
     if (mysqli_stmt_execute($stmt)) {
         echo "success"; // Başarı mesajı gönder

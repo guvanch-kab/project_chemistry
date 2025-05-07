@@ -7,8 +7,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $bolumText = $_POST['bolum_caryek'];
-
+    $bolumID = $_POST['bolum_caryek_id'] ?? null;
+    $bolumText = $_POST['bolum_caryek_name'] ?? null;
+    
+    // Test için yazdır
+    //echo "ID: $bolumID<br>";
+   // echo "Ady: $bolumText<br>";
     $_SESSION['bolumText'] = $bolumText;         
 
     //var_dump($bolumText);

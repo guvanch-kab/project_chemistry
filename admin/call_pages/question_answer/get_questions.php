@@ -1,16 +1,27 @@
 <?php
 require_once '../../db_files/dbase.php';
 
-$sql = "SELECT * FROM questions";
-$result = $connect->query($sql);
+
 
 $options = ""; // HTML içeriği oluşturmak için
-while ($row = $result->fetch_assoc()) {
-    $options .= "<option value='{$row['id']}'>{$row['question_text']}</option>";
+
+if (isset($_GET['degeri'])) {
+    $degeri = intval($_GET['degeri']);
+
+    $sql = "SELECT * FROM questions WHERE caryek = $degeri";
+    $result = $connect->query($sql);
+
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $options .= "<option value='{$row['id']}'>{$row['question_text']}</option>";
+        }
+    } else {
+        // Eğer sonuç yoksa mesaj göster
+        $options = "<option disabled selected> Degisli maglumat tapylmady</option>";
+    }
 }
 
-// HTML olarak döndür
 echo $options;
-
 $connect->close();
+
 ?>

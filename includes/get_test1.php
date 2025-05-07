@@ -92,7 +92,7 @@
         <div id=""
             style="font-weight: 600; padding:8px 8px; border-bottom: 1px solid #cee08f; background-color: #fff;">
             <div class="" style="display: flex; justify-content: center;">
-            <span id="bolumText"></span>
+            <span id="bolumText">*lar</span>
             <span style="padding: 0 5px;">ucin soraglar</span>
             </div>
 

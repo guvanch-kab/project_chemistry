@@ -1,21 +1,34 @@
 <?php
-header('Content-Type: text/html; charset=utf-8'); // HTML çıktısı döndürmek için
-
+header('Content-Type: text/html; charset=utf-8');
 require_once '../../db_files/dbase.php';
 
-try {
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $action_caryek = $_POST['caryek'];
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $action_caryek = isset($_POST['caryek']) ? trim($_POST['caryek']) : '';
+    $get_Date = isset($_POST['tarih_al']) ? trim($_POST['tarih_al']) : '';
 
-    $query = "SELECT * FROM exam_result where caryek='$action_caryek' ";
+    echo'<pre';
+    echo $_POST['tarih_al'];
+    echo'</pre>';
+
+    // Temel SQL sorgusu
+    $query = "SELECT * FROM exam_result WHERE 1=1";
+
+    // Caryek varsa
+    if (!empty($action_caryek)) {
+        $query .= " AND caryek = '" . mysqli_real_escape_string($connect, $action_caryek) . "'";
+    }
+
+    // Tarih varsa
+    if (!empty($get_Date)) {
+        $query .= " AND DATE(exam_date) = '" . mysqli_real_escape_string($connect, $get_Date) . "'";
+    }
+
     $result = mysqli_query($connect, $query);
 
     if ($result && mysqli_num_rows($result) > 0) {
-        $html = '
-        <table class="table table-bordered" style="background-color:#fff;">
+        echo '<table class="table table-bordered" style="background-color:#fff;">
             <thead>
                 <tr>
-                    
                     <th>Ulanyjy ID</th>
                     <th>Okuwcy Ady</th>
                     <th>Synag senesi</th>
@@ -23,16 +36,13 @@ try {
                     <th>Dogru sany</th>
                     <th>Yalňyş sany</th>
                     <th>Çarýek</th>
-                     <th>Poz</th>
+                    <th>Poz</th>
                 </tr>
             </thead>
-            <tbody>
-        ';
+            <tbody>';
 
         while ($row = mysqli_fetch_assoc($result)) {
-            $html .= '
-                <tr>
-                  
+            echo '<tr>
                     <td>' . htmlspecialchars($row['user_id']) . '</td>
                     <td>' . htmlspecialchars($row['student_name']) . '</td>
                     <td>' . htmlspecialchars($row['exam_date']) . '</td>
@@ -40,28 +50,23 @@ try {
                     <td>' . htmlspecialchars($row['correct_count']) . '</td>
                     <td>' . htmlspecialchars($row['incorrect_count']) . '</td>
                     <td>' . htmlspecialchars($row['caryek']) . '</td>
-                   <td><button type="button" class="btn btn-danger delete-row" data-exam_date="' . htmlspecialchars($row['exam_date']) . '"  data-caryek="' . htmlspecialchars($row['caryek']) . '"   data-id="' . htmlspecialchars($row['user_id']) . '">Poz</button></td>
-                </tr>
-            ';
+                    <td><button type="button" class="btn btn-danger delete-row"
+                        data-exam_date="' . htmlspecialchars($row['exam_date']) . '"
+                        data-caryek="' . htmlspecialchars($row['caryek']) . '"
+                        data-id="' . htmlspecialchars($row['user_id']) . '">Poz</button></td>
+                </tr>';
         }
 
-        $html .= '</tbody></table>';
+        echo '</tbody></table>';
     } else {
-        // Veri yoksa bir mesaj döndür
-        $html = '<p>Maglumat tapylmady.</p>';
+        echo '<p>Maglumat tapylmady.</p>';
     }
-
-    echo $html; // Hazır HTML tablosunu döndür
-} 
-}
-catch (Exception $e) {
-    // Hata durumunda kullanıcıya bilgi ver
-    echo '<p>Bir hata oluştu: ' . htmlspecialchars($e->getMessage()) . '</p>';
 }
 
-// Bağlantıyı kapat
 mysqli_close($connect);
 ?>
+
+
 
 <script>
 $(document).ready(function () {

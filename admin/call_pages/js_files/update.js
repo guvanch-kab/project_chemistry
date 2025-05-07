@@ -6,16 +6,21 @@ $(function () {
         $("#question-form, .order_questions").hide();
         $("#update_quest_answer").show();
 
-        // Soru listesini getir
+       $("#caryek_select").on("change", function () {         
+       // var id_si = $(this).val();
+       var saylanan_deger = $(this).find("option:selected").text();                     
+
         $.ajax({
             url: 'call_pages/question_answer/get_questions.php',
             method: 'GET',
+            data: { degeri: saylanan_deger },
             success: function (data) {
                 $("#question_select").html('<option value="">Soragy sayla</option>' + data);
             },
             error: function () {
                 alert("Bir hata oluştu. Lütfen tekrar deneyin.");
             }
+        });
         });
     });
 

@@ -107,10 +107,14 @@ $(document).ready(function () {
     $('#loginForm').on('submit', function (e) {
         e.preventDefault();
      
-        const selectedText = $('#bolum_caryek').find(':selected').text(); // Text değerini al
-        //alert(selectedText)
+        const selectedOption = $('#bolum_caryek option:selected');
+        const caryekId = selectedOption.val();              // Örneğin: "9"
+        const caryekName = selectedOption.text().trim();    // Örneğin: "1. Caryek"
 
-        const formData = $(this).serialize() + '&bolum_caryek=' + encodeURIComponent(selectedText);
+    const formData = $(this).serialize() +
+        '&bolum_caryek_id=' + encodeURIComponent(caryekId) +
+        '&bolum_caryek_name=' + encodeURIComponent(caryekName);
+      // formData.append("bolum_caryek", selectedText);
 
         $.ajax({
             url: 'includes/login_form/login.php',

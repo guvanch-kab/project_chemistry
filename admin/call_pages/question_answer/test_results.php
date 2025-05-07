@@ -29,7 +29,7 @@
 
                     <div class="col-md-3">
                         <label for="name">Synag wagty</label><span></span>
-                        <input type="date" class="form-control"  id="section_date" name="section_date" >
+                        <input type="date" class="form-control tarih_belle"  id="section_date" name="section_date" >
                     </div>
                     
                 </div>
@@ -62,14 +62,14 @@ $(document).ready(function () {
                 $("#synaglar").html(response);
             },
             error: function () {
-                $("#synaglar").html("<p>Veri alınırken bir hata oluştu.</p>");
+                $("#synaglar").html("<p>Maglumatlar alynanda mesele yuze cykdy.</p>");
             }
         });
     }
 
     // Sayfa yüklendiğinde sonuçları getir
     fetchResults();
-    
+    // Caryekleri DB-dan getirip, select option -a yerlresdirer 
     $.ajax({
         url: 'call_pages/caryek_handler.php',
         type: 'POST',
@@ -79,24 +79,34 @@ $(document).ready(function () {
         }
     });
 
-    $('#bolum_caryek').on('change', function (e) {
-        e.preventDefault();
-     
-        const selectedText = $('#bolum_caryek').find(':selected').text(); // Text değerini al
-       
-              $.ajax({
-            url: "call_pages/question_answer/get_exam_results.php",
-            type: 'POST',
-            data:{caryek:selectedText},               //formData, //$(this).serialize(),
-            success: function (response) {
-               
-                $("#synaglar").html(response);
-            },
-            error: function () {
-                $("#synaglar").html("<p>Maglumatlar alynanda yalnyslyk yuze cykdy.</p>");
-            }
-        });
+    $('#bolum_caryek, #section_date').on('change', function (e) {
+    e.preventDefault();
+
+    const selectedText = $('#bolum_caryek').find(':selected').text().trim(); // Text olarak alınıyor
+    const tarih_al = $(".tarih_belle").val().trim(); // Tarih alanı
+
+    // İkisi de boşsa sorgu yapma (isteğe bağlı)
+    if (!selectedText && !tarih_al) {
+        $("#synaglar").html("<p>Çekmek üçin maglumat giriz.</p>");
+        return;
+    }
+
+    $.ajax({
+        url: "call_pages/question_answer/get_exam_results.php",
+        type: 'POST',
+        data: {
+            caryek: selectedText,
+            tarih_al: tarih_al
+        },
+        success: function (response) {
+            $("#synaglar").html(response);
+        },
+        error: function () {
+            $("#synaglar").html("<p>Maglumatlar alynanda ýalňyşlyk ýüze çykdy.</p>");
+        }
     });
+});
+
 
 
 

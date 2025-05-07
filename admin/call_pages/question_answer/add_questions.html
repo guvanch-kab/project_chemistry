@@ -2,7 +2,7 @@
 <div class="container my-4">
     <div class="row">
         <div class="col-md-10 cont">
-            <h4 style="border-bottom: 1px solid #47e027; padding: 2px 0;">Test taýarla</h4>
+            <h4 style="border-bottom: 1px solid #47e027; padding: 2px 0;">Test taýarla - Üýtget</h4>
         </div>
 
         <div class="col-md-2" style="text-align: right;">
@@ -25,7 +25,7 @@
         </div>
 
         <div class="col-mb-3">
-            <label for="exampleFormControlSelect1">Çärýekler</label>
+            <label for="exampleFormControlSelect1"></label>
             <select class="form-control" id="bolum_caryek" name="bolum_caryek" style="margin-bottom:12px;font-size:14px"
                 required>
                 <!-- <option selected disabled value="">Çarýek sayla</option> -->
@@ -69,6 +69,18 @@
     <div id="response-message" style="margin-top: 20px;"></div>
 
     <!---------------------- UPDATE QUESTIONS--------------------------------------->
+<script>
+    $.ajax({
+        url: '../includes/caryek_handler.php',
+        type: 'POST',
+        data: { action: 'fetch' },
+        success: function (data) {
+            $('#caryek_select').html('<option selected disabled value="">Caryek sayla</option>' + data);
+        }
+    });
+</script>
+
+
 
     <div id="" style="margin-top: 20px;">       
 
@@ -77,6 +89,14 @@
             <div class="col-md-12" id="update_questions">
 
                 <form id="updateForm" enctype="multipart/form-data">
+                    
+                    <input type="hidden" id="caryek_id" name="caryek_id"> 
+                    <label for="caryek_select">Çärýek saýla:</label>
+                    <select id="caryek_select" class="form-control">
+                        <option selected disabled value="">Caryek sayla</option>
+                       
+                    </select><br><br>
+
                     <input type="hidden" id="question_id" name="id"> 
                     <label for="question_select">Sorag saýla:</label>
                     <select id="question_select" class="form-control">
@@ -85,7 +105,7 @@
                     </select><br><br>
 
                     <label for="single_image">Sorag suraty:</label>
-<div id="single_image_container"></div> <!-- Tekli resim burada gösterilecek -->
+                    <div id="single_image_container"></div> <!-- Tekli resim burada gösterilecek -->
 
                     <label for="question_text">Sorag:</label>
                     
@@ -121,11 +141,7 @@
         sessionStorage.clear();
     });
 
-    // $("#bolum_caryek").change(function () {
 
-    //     var aa = $("#bolum_caryek").text();
-    //     var caryek = $("#bolum_caryek option:selected").data('name');
-    // })
 </script>
 <script src="call_pages/js_files/submit_insert_quest_img.js"></script>
 <script src="call_pages/js_files/add_remove_button.js"></script>

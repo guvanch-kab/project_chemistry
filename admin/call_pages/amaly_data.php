@@ -228,7 +228,7 @@
         // Sunucudan içerik yükle (sayfa refresh yerine)
         $("#main_pl").load("call_pages/amaly_paragraph_data.php", function(response, status, xhr) {
             if (status == "error") {
-                $("#main_pl").html('<div class="alert alert-danger">Veriler yüklenemedi!</div>');
+                $("#main_pl").html('<div class="alert alert-danger">Maglumatlar yuklenmedi!</div>');
             }
         });
     });

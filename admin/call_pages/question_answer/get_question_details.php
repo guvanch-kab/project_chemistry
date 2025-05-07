@@ -3,12 +3,14 @@ require_once '../../db_files/dbase.php';
 
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
+
     $sql = "SELECT * FROM questions WHERE id = $id";
+
     $result = mysqli_query($connect, $sql);
     $row = mysqli_fetch_assoc($result);
 
     if (!$row) {
-        echo json_encode(['status' => 'error', 'message' => 'Soru bulunamadı.']);
+        echo json_encode(['status' => 'error', 'message' => 'Sorag tapylmady.']);
         exit;
     }
     $singleImage = !empty($row['question_img']) ? "call_pages/question_answer/surat_yukle/" . $row['question_img'] : null;
